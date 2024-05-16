@@ -1,7 +1,5 @@
 exports.handler = function(context, event, callback) {
-    const result = {
-        message : "Hello World!"
-    }
-
-    callback(null, result);
-  };
+  const twiml = new Twilio.twiml.VoiceResponse();
+  twiml.say('Hello World!');
+  callback(null, twiml);
+};
