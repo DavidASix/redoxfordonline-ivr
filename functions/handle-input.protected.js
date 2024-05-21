@@ -48,12 +48,16 @@ exports.handler = async function (context, event, callback) {
       case "3":
         console.log("Connecting caller to owner...");
         twiml.say({ voice }, "Connecting you to the owner. Please hold.");
-        twiml.pause({ length: 1 });
-        twiml.dial(context.MY_PHONE_NUMBER);
+        twiml.dial({
+          timeout: 15,
+          action: '/no-answer'
+        }).number({
+          url: '/whisper'
+        }, context.MY_PHONE_NUMBER);
         break;
       default:
         console.log("Invalid input.");
-        twiml.say({ voice }, "Invalid input. Please try again.");
+        twiml.say({ voice }, "Sorry that's not an option, please try again.");
         twiml.redirect("voice-ivr");
     }
 
