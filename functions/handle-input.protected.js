@@ -40,19 +40,28 @@ exports.handler = async function (context, event, callback) {
           { voice },
           "You will receive a text message shortly. Thank you for calling us today, goodbye!"
         );
+        twiml.hangup();
         break;
       case "2":
         console.log("Recording message...");
-        twiml.say({ voice }, "Please leave a message after the beep.");
+        twiml.say({ voice }, "Please leave a message with your name, phone number, and reason for your call.");
+        twiml.say({ voice }, "We will get back to you as soon as possible.");
+        twiml.record({
+          maxLength: 30,
+          transcribe: true,
+          transcribeCallback: '/transcribe-voicemail',
+          playBeep: true
+        });
+        twiml.hangup();
         break;
       case "3":
         console.log("Connecting caller to owner...");
         twiml.say({ voice }, "Connecting you to the owner. Please hold.");
         twiml.dial({
           timeout: 15,
-          action: '/no-answer'
+          action: '/owner-call-complete',
         }).number({
-          url: '/whisper'
+          url: '/whisper',
         }, context.MY_PHONE_NUMBER);
         break;
       default:
@@ -60,8 +69,6 @@ exports.handler = async function (context, event, callback) {
         twiml.say({ voice }, "Sorry that's not an option, please try again.");
         twiml.redirect("voice-ivr");
     }
-
-    twiml.hangup();
     callback(null, twiml);
   } catch (error) {
     console.error("Error handling input:", error);
