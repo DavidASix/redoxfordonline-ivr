@@ -1,12 +1,13 @@
 {
   "name": "roo-ivr",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "node index.js"
+    "start": "nodemon index.js"
   },
   "dependencies": {
     "@twilio/runtime-handler": "2.0.0",
+    "axios": "^1.7.2",
     "express": "^4.19.2",
     "twilio": "5.0.3"
   },

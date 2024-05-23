@@ -1,45 +1,30 @@
-async function sendText(context, to, body) {
-  // Get the Twilio client
-  const client = context.getTwilioClient();
-  const from = context.TWILIO_PHONE_NUMBER;
+const express = require('express');
+const router = express.Router();
+const Twilio = require('twilio');
+require('dotenv').config();
 
-  try {
-    // Create and send a new message
-    const message = await client.messages.create({ body, from, to });
-    console.log(`Sent message ${message.sid}`);
-  } catch (error) {
-    console.error("Error sending text:", error);
-  }
-}
-
-exports.handler = async function (context, event, callback) {
+router.post('/', async (req, res) => {
   const twiml = new Twilio.twiml.VoiceResponse();
   const voice = "Polly.Joey";
-  const digit = event.Digits;
+  const digit = req.body.Digits;
+
   try {
     switch (digit) {
       case "1":
-        console.log("Sending text...");
-        const message =
-          "" +
-          "Hello from Red Oxford Online!\n" +
-          "We create high quality websites that your clients will love.\n\n" +
-          "Red Oxford Online is based in Waterloo Ontario, but we work with clients across North America. We're available 10AM and 6PM EDT, Monday - Friday.\n\n" +
-          "Our services: \n"+
-          "👉️ Website design\n"+
-          "👉️ Server & Backened Development\n"+
-          "👉️ Web Hosting\n"+
-          "👉️ Custom Domain Email\n"+
-          "👉️ Google Ad Campaigns & SEO\n\n"+ 
-          "We offer flexible payment options for new sites and site redesigns, with options starting at $0!\n\n" +
-          "Want to know more? Check out our website at redoxfordonline.com!\n"+
-          "Thanks for reaching out, we hope to hear from you soon!";
-        await sendText(context, event.From, message);
-        twiml.say(
-          { voice },
-          "You will receive a text message shortly. Thank you for calling us today, goodbye!"
-        );
-        twiml.hangup();
+        try {
+          twiml.say({ voice }, "Sending you a text, please wait.");
+          await axios.post('/messaging/send-text', {
+            to: req.body.From,
+            body: 'This is my text message!'
+          });
+          twiml.say({ voice }, "The text has been sent.");
+        } catch (err) {
+          console.log(err);
+          twiml.say({ voice }, "Sorry, an error occured");
+        } finally {
+          twiml.say({ voice }, "Thank you for your call, goodbye.");
+          twiml.hangup();
+        }
         break;
       case "2":
         console.log("Recording message...");
@@ -60,16 +45,19 @@ exports.handler = async function (context, event, callback) {
           action: 'handle-call-not-answered',
         }).number({
           url: '/whisper',
-        }, context.MY_PHONE_NUMBER);
+        }, process.env.MY_PHONE_NUMBER);
         break;
       default:
         console.log("Invalid input.");
         twiml.say({ voice }, "Sorry that's not an option, please try again.");
         twiml.redirect("voice-ivr");
     }
-    callback(null, twiml);
+    res.set("Content-Type", "text/xml");
+    res.send(twiml.toString());
   } catch (error) {
     console.error("Error handling input:", error);
-    callback(error);
+    res.status(500).send("Error handling input");
   }
-};
+});
+
+module.exports = router;
