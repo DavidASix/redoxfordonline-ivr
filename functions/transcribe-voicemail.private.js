@@ -1,8 +1,8 @@
-async function sendText(context, to, body) {
+async function sendTextNotification(context, to, body) {
   // Get the Twilio client
   const client = context.getTwilioClient();
   const from = context.TWILIO_PHONE_NUMBER;
-
+  console.log({to, from, body})
   try {
     // Create and send a new message
     const message = await client.messages.create({ body, from, to });
@@ -14,9 +14,11 @@ async function sendText(context, to, body) {
 
 exports.handler = async function (context, event, callback) {
   try {
-    const transcriptionText = event.TranscriptionText;
+    console.log('in transcript recording')
+    const transcriptionText = event.TranscriptionText
+    console.log({transcriptionText})
     const message = `New voicemail from ${event.From}: ${transcriptionText}`;
-    await sendText(context, context.MY_PHONE_NUMBER, message);
+    await sendTextNotification(context, context.MY_PHONE_NUMBER, message);
     callback(null, {});
   } catch (error) {
     console.error("Error handling transcription:", error);

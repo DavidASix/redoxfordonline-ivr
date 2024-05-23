@@ -16,7 +16,6 @@ exports.handler = async function (context, event, callback) {
   const twiml = new Twilio.twiml.VoiceResponse();
   const voice = "Polly.Joey";
   const digit = event.Digits;
-
   try {
     switch (digit) {
       case "1":
@@ -49,17 +48,16 @@ exports.handler = async function (context, event, callback) {
         twiml.record({
           maxLength: 30,
           transcribe: true,
-          transcribeCallback: '/transcribe-voicemail',
-          playBeep: true
+          transcribeCallback: 'transcribe-voicemail',
+          playBeep: true,
+          action: 'call-complete',
         });
-        twiml.hangup();
         break;
       case "3":
-        console.log("Connecting caller to owner...");
         twiml.say({ voice }, "Connecting you to the owner. Please hold.");
         twiml.dial({
           timeout: 15,
-          action: '/owner-call-complete',
+          action: 'handle-call-not-answered',
         }).number({
           url: '/whisper',
         }, context.MY_PHONE_NUMBER);

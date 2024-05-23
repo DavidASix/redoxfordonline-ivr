@@ -1,7 +1,7 @@
 exports.handler = function (context, event, callback) {
   const twiml = new Twilio.twiml.VoiceResponse();
   const callStatus = event.DialCallStatus;
-  console.log({callStatus})
+  
   if (callStatus === 'no-answer' || callStatus === 'failed' || callStatus === 'busy') {
     console.log('No Answer to call')
     twiml.say({ voice: 'Polly.Joey' }, 'Unfortunately nobody is available to take your call');
@@ -9,8 +9,9 @@ exports.handler = function (context, event, callback) {
     twiml.record({
       maxLength: 30,
       transcribe: true,
-      transcribeCallback: '/transcribe-voicemail',
-      playBeep: true
+      transcribeCallback: 'transcribe-voicemail',
+      playBeep: true,
+      action: 'call-complete',
     });
   }
   return callback(null, twiml);
