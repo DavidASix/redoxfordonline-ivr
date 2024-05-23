@@ -59,9 +59,9 @@ router.post('/', async (req, res) => {
         twiml.say({ voice }, "Connecting you to the owner. Please hold.");
         twiml.dial({
           timeout: 15,
-          action: 'handle-call-not-answered',
+          //action: 'handle-call-not-answered',
         }).number({
-          url: '/whisper',
+          url: 'whisper',
         }, process.env.MY_PHONE_NUMBER);
         break;
       default:
