@@ -1,7 +1,10 @@
 const express = require('express');
+const axios = require('axios');
 const router = express.Router();
 const Twilio = require('twilio');
-require('dotenv').config();
+require("dotenv").config();
+
+const domain = process.env.DOMAIN;
 
 router.post('/', async (req, res) => {
   const twiml = new Twilio.twiml.VoiceResponse();
@@ -13,9 +16,23 @@ router.post('/', async (req, res) => {
       case "1":
         try {
           twiml.say({ voice }, "Sending you a text, please wait.");
-          await axios.post('/messaging/send-text', {
+          const body = 
+          "" +
+          "Hello from Red Oxford Online!\n" +
+          "We create high quality websites that your clients will love.\n\n" +
+          "Red Oxford Online is based in Waterloo Ontario, but we work with clients across North America. We're available 10AM and 6PM EDT, Monday - Friday.\n\n" +
+          "Our services: \n"+
+          "👉️ Website design\n"+
+          "👉️ Server & Backened Development\n"+
+          "👉️ Web Hosting\n"+
+          "👉️ Custom Domain Email\n"+
+          "👉️ Google Ad Campaigns & SEO\n\n"+ 
+          "We offer flexible payment options for new sites and site redesigns, with options starting at $0!\n\n" +
+          "Want to know more? Check out our website at redoxfordonline.com!\n"+
+          "Thanks for reaching out, we hope to hear from you soon!";
+          await axios.post(`${domain}/messaging/send-text`, {
             to: req.body.From,
-            body: 'This is my text message!'
+            body,
           });
           twiml.say({ voice }, "The text has been sent.");
         } catch (err) {

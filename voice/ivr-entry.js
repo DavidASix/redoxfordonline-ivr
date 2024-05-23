@@ -26,7 +26,7 @@ router.post('/', (req, res) => {
   gather.say({voice}, "Press 2 to leave a message, which we'll respond to within 24 hours");
   gather.say({voice}, "Press 3 to speak with the owner");
 
-  res.set("Content-Type", "text/xml");
+  res.type("text/xml");
   res.send(twiml.toString());
 });
 
