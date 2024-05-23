@@ -1,7 +1,11 @@
-exports.handler = function (context, event, callback) {
+const express = require('express');
+const router = express.Router();
+const Twilio = require('twilio');
+
+router.post('/', async (req, res) => {
   const twiml = new Twilio.twiml.VoiceResponse();
-  const callStatus = event.DialCallStatus;
-  
+  const callStatus = req.body.DialCallStatus;
+
   if (callStatus === 'no-answer' || callStatus === 'failed' || callStatus === 'busy') {
     console.log('No Answer to call')
     twiml.say({ voice: 'Polly.Joey' }, 'Unfortunately nobody is available to take your call');
@@ -14,5 +18,8 @@ exports.handler = function (context, event, callback) {
       action: 'call-complete',
     });
   }
-  return callback(null, twiml);
-}
+  res.set("Content-Type", "text/xml");
+  res.send(twiml.toString());
+});
+
+module.exports = router;

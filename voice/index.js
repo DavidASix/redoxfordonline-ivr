@@ -14,4 +14,10 @@ router.use('/whisper', whisperRouter);
 const handleCallNotAnsweredRouter = require('./handle-call-not-answered');
 router.use('/handle-call-not-answered', handleCallNotAnsweredRouter);
 
+const transcribeVoicemailRouter = require('./transcribe-voicemail');
+router.use('/transcribe-voicemail', transcribeVoicemailRouter);
+
+const callCompleteRouter = require('./call-complete');
+router.use('/call-complete', callCompleteRouter);
+
 module.exports = router;

@@ -1,27 +1,25 @@
-async function sendTextNotification(context, to, body) {
-  // Get the Twilio client
-  const client = context.getTwilioClient();
-  const from = context.TWILIO_PHONE_NUMBER;
-  console.log({to, from, body})
-  try {
-    // Create and send a new message
-    const message = await client.messages.create({ body, from, to });
-    console.log(`Sent message ${message.sid}`);
-  } catch (error) {
-    console.error("Error sending text:", error);
-  }
-}
+const express = require('express');
+const router = express.Router();
+const axios = require('axios');
+require('dotenv').config();
 
-exports.handler = async function (context, event, callback) {
+const domain = process.env.DOMAIN;
+
+router.post('/', async (req, res) => {
   try {
     console.log('in transcript recording')
-    const transcriptionText = event.TranscriptionText
+    const transcriptionText = req.body.TranscriptionText
     console.log({transcriptionText})
-    const message = `New voicemail from ${event.From}: ${transcriptionText}`;
-    await sendTextNotification(context, context.MY_PHONE_NUMBER, message);
-    callback(null, {});
+    const message = `New voicemail from ${req.body.From}: ${transcriptionText}`;
+    await axios.post(`${domain}/messaging/send-text`, {
+      to: process.env.MY_PHONE_NUMBER,
+      body: message
+    });
+    res.send({});
   } catch (error) {
     console.error("Error handling transcription:", error);
-    callback(error);
+    res.status(500).send("Error handling transcription");
   }
-};
+});
+
+module.exports = router;
