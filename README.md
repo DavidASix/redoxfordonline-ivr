@@ -8,7 +8,7 @@ This is an Express JS server to be hosted privately; It manages an IVR system fo
 ## Why Self Host?
 
 Twilio offers Service hosting and Twilio Flow's, which achieve a similar result, so why bother self-hosting this? It essentially boils down to two things.
-- **Developer Experience** Self hosting enables me to create a CI/CD pipeline to automate deployment of the server from GitHub. Twilio currently does not support deployment of their services via GitHub, and I do not want to manage a new stack for this pipeline.
+- **Developer Experience** Self hosting enables me to create a CI/CD pipeline via [this webhook](https://github.com/DavidASix/roo-webhook) to automate deployment of the server from GitHub. Twilio currently does not support deployment of their services via GitHub, and I do not want to manage a new stack for this pipeline.
 - **Freedom** Self hosting an Express server to manage this IVR gives freedom to easily integrate other libraries and API's into the system. Twilio's serverless setup reduces the functionality of the IVR.
 
 ## Development
