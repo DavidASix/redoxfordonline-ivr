@@ -11,7 +11,6 @@ router.post("/", async (req, res) => {
   const to = req.body.to;
   const body = req.body.body;
   const from = process.env.TWILIO_PHONE_NUMBER;
-  console.log({ to, from, body });
   try {
     // Create and send a new message
     const message = await client.messages.create({ body, from, to });
