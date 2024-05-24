@@ -15,7 +15,7 @@ router.post('/', async (req, res) => {
     switch (digit) {
       case "1":
         try {
-          twiml.say({ voice }, "Sending you a text, please wait.");
+          twiml.say({ voice }, "Sending you a text now.");
           const body = 
           "" +
           "Hello from Red Oxford Online!\n" +

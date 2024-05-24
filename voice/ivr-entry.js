@@ -7,7 +7,7 @@ router.post("/", (req, res) => {
   const twiml = new Twilio.twiml.VoiceResponse();
   const voice = "Polly.Joey";
 
-  twiml.say({ voice }, "Thanks for calling Red Oxford Online.");
+  twiml.say({ voice }, "Thank you for calling Red Oxford Online.");
   twiml.pause({ length: 1 });
   twiml.say(
     { voice },
