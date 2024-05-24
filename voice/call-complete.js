@@ -5,7 +5,7 @@ const Twilio = require("twilio");
 router.post("/", async (req, res) => {
   const twiml = new Twilio.twiml.VoiceResponse();
   twiml.hangup();
-  res.set("Content-Type", "text/xml");
+  res.type("text/xml");
   res.send(twiml.toString());
 });
 

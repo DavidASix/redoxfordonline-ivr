@@ -44,7 +44,6 @@ router.post('/', async (req, res) => {
         }
         break;
       case "2":
-        console.log("Recording message...");
         twiml.say({ voice }, "Please leave a message with your name, phone number, and reason for your call.");
         twiml.say({ voice }, "We will get back to you as soon as possible.");
         twiml.record({
@@ -69,7 +68,7 @@ router.post('/', async (req, res) => {
         twiml.say({ voice }, "Sorry that's not an option, please try again.");
         twiml.redirect("voice-ivr");
     }
-    res.set("Content-Type", "text/xml");
+    res.type("text/xml");
     res.send(twiml.toString());
   } catch (error) {
     console.error("Error handling input:", error);

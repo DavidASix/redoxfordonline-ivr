@@ -6,7 +6,7 @@ router.post("/", async (req, res) => {
   const twiml = new Twilio.twiml.VoiceResponse();
   const voice = "Polly.Joey";
   twiml.say({ voice }, "Red Oxford Online! Please respond accordingly");
-  res.set("Content-Type", "text/xml");
+  res.type("text/xml");
   res.send(twiml.toString());
 });
 
